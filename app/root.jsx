@@ -1,3 +1,6 @@
+import sharedStyles from '~/styles/shared.css';
+import MainHeader from './components/navigation/MainHeader';
+
 const {
   Links,
   LiveReload,
@@ -6,8 +9,6 @@ const {
   Scripts,
   ScrollRestoration,
 } = require("@remix-run/react");
-
-import sharedStyles from '~/styles/shared.css';
 
 export const meta = () => ({
   charset: "utf-8",
@@ -26,6 +27,7 @@ export default function App() {
         <Links />
       </head>
       <body>
+        <MainHeader />
         <Outlet />
         <ScrollRestoration />
         <Scripts />
