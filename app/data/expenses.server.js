@@ -22,5 +22,14 @@ export async function getExpenses() {
     } catch (error) {
         throw error;
     }
+}
+
+export async function getExpense(id) {
+    try {
+        const expense = await prisma.expense.findFirst({ where: { id }});
+        return expense;
+    } catch (error) {
+        throw error;
+    }
 
 }

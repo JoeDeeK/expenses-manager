@@ -30,6 +30,7 @@ export default function ExpensesLayout() {
 }
 
 export async function loader() {
+    // Remix basically does json(rawData) behind scenes for same result
     return await getExpenses();
 }
 
