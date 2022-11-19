@@ -1,12 +1,37 @@
-import { Link, useActionData } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useActionData,
+  // useSubmit
+  useTransition
+} from "@remix-run/react";
 
 function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
   // pick up on error thrown by serverside validation
   const validationErrors = useActionData();
 
+  // // submit programmically
+  // const submit = useSubmit();
+  // function submitHandler(event) {
+  //   event.preventDefault();
+  //   // perform own validation
+  //   submit(event.target, {
+  //     // action: '/expenses/add',
+  //     method: 'post',
+  //   })
+  // }
+
+  const navigation = useTransition();
+  const isSubmitting = navigation.state !== 'idle';
+
+  // use <Form instead of <form to generate and send http request by Remix behind scenes. Stay in single page app.
   return (
-    <form method="post" className="form" id="expense-form">
+    <Form
+      method="post"
+      className="form"
+      // onSubmit={submitHandler}
+      id="expense-form">
       <p>
         <label htmlFor="title">Expense Title</label>
         <input type="text" id="title" name="title" required maxLength={30} />
@@ -31,11 +56,11 @@ function ExpenseForm() {
       </div>
       {validationErrors && <ul>{Object.values(validationErrors).map((error) => <li key={error}>{error}</li>)}</ul>}
       <div className="form-actions">
-        <button>Save Expense</button>
+        <button disabled={isSubmitting}>{isSubmitting ? 'Saving...' : 'Save Expense'}</button>
         {/* Can use '/expenses' or '..' to move back to parent folder */}
         <Link to=".." >Cancel</Link>
       </div>
-    </form>
+    </Form>
   );
 }
 
