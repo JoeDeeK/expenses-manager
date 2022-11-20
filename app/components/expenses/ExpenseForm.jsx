@@ -3,6 +3,8 @@ import {
   Link,
   useActionData,
   useLoaderData,
+  useMatches,
+  useParams,
   // useSubmit
   useTransition
 } from "@remix-run/react";
@@ -14,7 +16,15 @@ function ExpenseForm() {
   const validationErrors = useActionData();
 
   // pick up form data from loader in $id.jsx
-  const expenseData = useLoaderData();
+  // const expenseData = useLoaderData();
+
+  // get all routes loaded using matches hook (faster)
+  const matches = useMatches();
+  // could get params in loader data or using params hook
+  const params = useParams();
+  const expenses = matches.find((match) => match.id === 'routes/__app/expenses').data;
+  const expenseData = expenses.find(expense => expense.id === params.id);
+
   const defaultValues = expenseData ? {
     title: expenseData.title,
     amount: expenseData.amount,
