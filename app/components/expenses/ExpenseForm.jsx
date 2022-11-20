@@ -53,7 +53,8 @@ function ExpenseForm() {
   // use <Form instead of <form to generate and send http request by Remix behind scenes. Stay in single page app.
   return (
     <Form
-      method="post"
+      // use patch for updating, post for adding new
+      method={expenseData ? 'patch' : 'post'}
       className="form"
       // onSubmit={submitHandler}
       id="expense-form">
