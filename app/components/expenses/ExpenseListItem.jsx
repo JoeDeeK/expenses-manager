@@ -4,6 +4,9 @@ function ExpenseListItem({ id, title, amount }) {
   // use fetcher when you want to submit requests behind scenes without triggering navigation actions
   const fetcher = useFetcher();
   function deleteExpenseItemHandler() {
+    const proceed = confirm('Are you sure? Do you want to delete this item?');
+    if (!proceed) return;
+
     fetcher.submit(null, {method: 'delete', action: `/expenses/${id}`});
   }
 
