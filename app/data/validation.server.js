@@ -30,3 +30,31 @@ export function validateExpenseInput(input) {
     throw validationErrors;
   }
 }
+
+function isValidEmail(value) {
+  return String(value)
+  .toLowerCase()
+  .match(
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  );
+}
+
+function isValidPassword(value) {
+  return value && value.trim().length >= 5 && value.trim().length <= 10;
+}
+
+export function validateAuthInput(input) {
+  let validationErrors = {};
+
+  if (!isValidEmail(input.email)) {
+    validationErrors.email = 'Invalid email address.'
+  }
+
+  if (!isValidPassword(input.password)) {
+    validationErrors.password = 'Invalid password. Password length must be greater than 5 characters and less than 10.'
+  }
+
+  if (Object.keys(validationErrors).length > 0) {
+    throw validationErrors;
+  }
+}
