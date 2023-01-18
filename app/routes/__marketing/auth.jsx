@@ -25,7 +25,6 @@ export async function action({request}) {
     } catch (error) {
         return error;
     }
-    console.log('authMode: ', authMode)
 
     try {
         if (authMode === 'login') {
@@ -35,7 +34,7 @@ export async function action({request}) {
             // return redirect('/expenses');
         }
     } catch (error) {
-        if (error.status === 422) {
+        if (error.status === 422 || error.status === 401) {
             return {credentials: error.message};
         }
     }
