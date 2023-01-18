@@ -25,6 +25,12 @@ function ExpenseForm() {
   const expenses = matches.find((match) => match.id === 'routes/__app/expenses').data;
   const expenseData = expenses.find(expense => expense.id === params.id);
 
+  // display message when invalid expense id entered in url (instead of loading 404 error)
+  if(params.id && !expenseData) {
+    // throw new Response();
+    return <p>Invalid expense id.</p>;
+  }
+
   const defaultValues = expenseData ? {
     title: expenseData.title,
     amount: expenseData.amount,
