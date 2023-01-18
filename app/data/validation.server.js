@@ -43,7 +43,7 @@ function isValidPassword(value) {
   return value && value.trim().length >= 5 && value.trim().length <= 10;
 }
 
-export function validateAuthInput(input) {
+export function validateCredentials(input) {
   let validationErrors = {};
 
   if (!isValidEmail(input.email)) {
@@ -51,10 +51,26 @@ export function validateAuthInput(input) {
   }
 
   if (!isValidPassword(input.password)) {
-    validationErrors.password = 'Invalid password. Password length must be greater than 5 characters and less than 10.'
+    validationErrors.password = 'Invalid password. Must be at least 7 characters long.'
   }
 
   if (Object.keys(validationErrors).length > 0) {
     throw validationErrors;
   }
 }
+
+// export function validateAuthInput(input) {
+//   let validationErrors = {};
+
+//   if (!isValidEmail(input.email)) {
+//     validationErrors.email = 'Invalid email address.'
+//   }
+
+//   if (!isValidPassword(input.password)) {
+//     validationErrors.password = 'Invalid password. Password length must be greater than 5 characters and less than 10.'
+//   }
+
+//   if (Object.keys(validationErrors).length > 0) {
+//     throw validationErrors;
+//   }
+// }

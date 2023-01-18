@@ -3,6 +3,7 @@ import ExpensesList from '~/components/expenses/ExpensesList';
 import expensesStyles from '~/styles/expenses.css';
 import { FaPlus, FaDownload } from 'react-icons/fa';
 import { getExpenses } from '~/data/expenses.server';
+import { requireUserSession } from '~/data/auth.server';
 
 
 export default function ExpensesLayout() {
@@ -29,9 +30,11 @@ export default function ExpensesLayout() {
     );
 }
 
-export async function loader() {
+export async function loader({request}) {
+    // redirect user if not logged in *must add to all nested loaders to ensure data not fetched before redirect
+    const userId = await requireUserSession(request);
     // Remix basically does json(rawData) behind scenes for same result
-    return await getExpenses();
+    return await getExpenses(userId);
 }
 
 export function links() {

@@ -3,6 +3,7 @@ import marketingStyles from '~/styles/marketing.css';
 
 import { Outlet } from "@remix-run/react";
 import MainHeader from '~/components/navigation/MainHeader';
+import { getUserFromSession } from '~/data/auth.server';
 
 export default function ExpensesAppLayout() {
     return (
@@ -11,6 +12,10 @@ export default function ExpensesAppLayout() {
             <Outlet />
         </>
     );
+}
+
+export function loader({request}) {
+    return getUserFromSession(request);
 }
 
 export function links() {

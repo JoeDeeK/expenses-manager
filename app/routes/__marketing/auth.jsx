@@ -1,6 +1,9 @@
 import authStyles from '~/styles/auth.css';
 import AuthForm from '~/components/auth/AuthForm';
-import { validateAuthInput } from '~/data/validation.server';
+import { validateCredentials } from '~/data/validation.server';
+import { login, signup } from '~/data/auth.server';
+import { redirect } from '@remix-run/node';
+// import { validateAuthInput } from '~/data/validation.server';
 
 export default function AuthPage() {
     return <AuthForm />;
@@ -16,18 +19,27 @@ export async function action({request}) {
 
     // validate auth input
     try {
-        console.log('try to validate auth input')
-        validateAuthInput(credentials);
+        // console.log('try to validate auth input')
+        // validateAuthInput(credentials);
+        validateCredentials(credentials)
     } catch (error) {
         return error;
     }
+    console.log('authMode: ', authMode)
 
-    // if (authMode === 'login') {
-
-    // } else {
-    //     // signup mode (create user)
-    // }
-    return { bla:'bla' }
+    try {
+        if (authMode === 'login') {
+            return await login(credentials);
+        } else {
+            return await signup(credentials);
+            // return redirect('/expenses');
+        }
+    } catch (error) {
+        if (error.status === 422) {
+            return {credentials: error.message};
+        }
+    }
+    return null;
 }
 
 export function links() {

@@ -1,7 +1,10 @@
-import { Link, NavLink } from '@remix-run/react';
+import { Form, Link, NavLink, useLoaderData } from '@remix-run/react';
 import Logo from '../util/Logo';
 
 function MainHeader() {
+
+  const userId = useLoaderData();
+
   return (
     <header id="main-header">
       <Logo />
@@ -18,10 +21,15 @@ function MainHeader() {
       <nav id="cta-nav">
         <ul>
           <li>
+            {userId && (
+              <Form method="post" id="logout-form" action="/logout">
+                <button className="cta-alt">Logout</button>
+              </Form>
+            )}
             {/* Using Link, don't want it to be highlighted link the NavLink */}
-            <Link to="/auth" className="cta">
+            {!userId && (<Link to="/auth" className="cta">
               Login
-            </Link>
+            </Link>)}
           </li>
         </ul>
       </nav>
