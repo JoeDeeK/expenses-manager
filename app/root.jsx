@@ -1,4 +1,5 @@
 import sharedStyles from '~/styles/shared.css';
+import Error from './components/util/Error';
 
 
 const {
@@ -8,6 +9,8 @@ const {
   Outlet,
   Scripts,
   ScrollRestoration,
+  Link,
+  useCatch,
 } = require("@remix-run/react");
 
 export const meta = () => ({
@@ -16,10 +19,11 @@ export const meta = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
-export default function App() {
+function Document({title, children}) {
   return (
     <html lang="en">
       <head>
+        <title>{title}</title>
         <Meta />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
@@ -27,13 +31,57 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        {children}
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
       </body>
     </html>
   );
+}
+
+export default function App() {
+  return (
+    <Document>
+      <Outlet />
+    </Document>
+  );
+}
+
+// run when error 404 (visit incorrect url)
+export function CatchBoundary() {
+  const caughtResponse = useCatch();
+  // console.log('CAUGHT:', caughtResponse)
+
+  return (
+    <Document title={caughtResponse.statusText}>
+      <main>
+        <Error title={caughtResponse.statusText}>
+          <p>{caughtResponse.data?.message || 'Something went wrong. Please try again later.'}</p>
+          <p>Back to <Link to="/">safety</Link>.</p>
+        </Error>
+      </main>
+    </Document>
+  )
+}
+
+// run when regular error throw or rethrown (i.e. failed attempt to delete an expense)
+export function ErrorBoundary({ error }) {
+  return (
+    <Document title="An error occurred">
+      <main>
+        <Error title="An error occurred">
+          <p>
+            {error.message ||
+              'Something went wrong. Please try again later.'}
+          </p>
+          <p>
+            Back to <Link to="/">safety</Link>.
+          </p>
+        </Error>
+      </main>
+    </Document>
+  )
 }
 
 export function links() {
